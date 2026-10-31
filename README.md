@@ -22,6 +22,8 @@ This is a post-competition score comparison, not an official competition rank or
 
 OOF means out-of-fold: each sequence is predicted by models trained without its validation participants. Arrival-order experiments use the same sequences; they test order sensitivity rather than provide five independent datasets.
 
+![Public and private scores for the two evaluated submissions](assets/leaderboard.svg)
+
 ## Problem and data
 
 The training set contains **8,151 sequences from 81 participants**, with **18 gesture labels**.
@@ -46,7 +48,7 @@ The pipeline includes IMU feature construction, fold-specific preprocessing, han
 
 The phases variant predicts three temporal phases from IMU and uses phase-weighted temporal averaging. The architectures also include residual and squeeze-and-excitation blocks.
 
-The final system uses **no GRU or Transformer**. GRU experiments were evaluated but were not retained.
+The final system uses **no GRU or Transformer**. The BiGRU pilots and their measured results are documented below.
 
 ### 2. Composite prediction targets
 
@@ -106,13 +108,33 @@ Weights were compared on these OOF results. These are development comparisons, n
 
 ## Experiments and findings
 
-- The composite model was weaker than the original ensemble when used independently, but provided useful complementary situation probabilities.
-- Arithmetic blending with 25% composite gesture contribution improved the mean score in all three sensor conditions.
-- Increasing that contribution to 50% did not improve the mean over the 75/25 blend.
-- Giving one original CNN family 50% weight did not improve the tested equal-weight configuration.
-- Increasing ToF contrast at inference did not resolve the inspected participant's difficulties and was not retained.
-- Sensor audits identified fully invalid orientation measurements in one participant's side-lying recordings.
-- Geometry and repetition analyses revealed participant-dependent signal patterns, but did not establish mislabeled examples.
+![Blending across five fixed arrival orders](assets/blending.svg)
+
+The points are scores for five arrival orders of the same OOF sequences, not confidence intervals. Plot means are recomputed from the reported six-decimal scores and can differ by one unit in the last decimal from means computed before rounding.
+
+- Independently, the composite model scored **0.80474 IMU / 0.86197 full / 0.83651 mixed**, versus **0.81900 / 0.87749 / 0.85032** for the initial ensemble. Its conditional situation probabilities nevertheless improved sequential assignment.
+- Adding 25% composite gesture contribution improved five-order means from **0.848736 to 0.853020 IMU**, **0.902116 to 0.906139 full**, and **0.877123 to 0.880060 mixed**.
+- A 50% composite gesture contribution reached **0.878206 mixed**, below **0.880060** for 25%. The geometric 75/25 alternative reached **0.879782**. The arithmetic 75/25 blend was selected for its highest tested mean.
+- Under the intermediate **12.5% composite gesture contribution**, equal CNN-family weights gave **0.878998** mixed mean. Giving heading, spatial or phases 50% weight gave **0.878298**, **0.877345** and **0.876086**, respectively. These tests support equal family weights within that configuration; they do not establish an optimum over all possible weights.
+- On fold 2 with all sensors, ToF contrast factors **1.0 / 1.25 / 0.8** scored **0.87402 / 0.87352 / 0.87112**. Factor 1.25 corrected **12** nine-class errors but lost **15** correct predictions. It changed no nine-class predictions for the inspected participant, SUBJ_032165. This specific inference transformation was not retained; it does not rule out geometry as a source of difficulty.
+- For SUBJ_058967, all **24 side-lying sequences** had invalid quaternions at every time step; the other inspected postures had valid quaternions. This finding localizes missing rotation, but does not quantify its causal effect.
+- An audit of **612 sequences from six selected participants** found no missing/extra repetitions within the observed gesture–posture groups, no exact duplicate complete sensor sequences, and no structural counter/phase-order anomalies under the implemented checks. These checks did not establish semantic label correctness.
+
+
+### Why the BiGRU pilots were not retained
+
+On **fold 1, IMU only**, the mean-pooling BiGRU scored **0.75283**, and the attention-pooling BiGRU scored **0.76272**, against the existing three-CNN reference at **0.82520**. Their 50/50 blends with the reference scored **0.80397** and **0.80945**, respectively: neither improved it.
+
+These pilots changed architecture and specialization relative to the reference, and compare single models with an ensemble. They justify not retaining those tested pilots, **not a general claim that GRUs or attention are inferior**.
+
+![Reported results for experiments not retained](assets/experiments.svg)
+
+### Evidence and figure reproduction
+
+- [Reported score data](results/reported_scores.csv): transcribed from experiment outputs and evaluated submission screenshots supplied during this study.
+- [Figure-generation script](scripts/plot_results.py): requires Python and Matplotlib; run `python scripts/plot_results.py` from the repository root.
+- Each figure specifies its evaluation scope. The BiGRU, contrast and family-weight experiments use different conditions and must not be compared as a common benchmark.
+- This initial evidence package contains reported aggregates, not the underlying complete experiment logs, checkpoints or per-sequence predictions. These will be linked or imported with the final source files.
 
 Exploratory analyses using annotated phases or same-participant labeled repetitions are diagnostic studies. They are not presented as submission-time predictors.
 
