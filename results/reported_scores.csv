@@ -1,0 +1,45 @@
+experiment,condition,method,score,order,fold
+blend_grid,mixed,Original hybrid,0.87744,11,all
+blend_grid,mixed,Original hybrid,0.880908,22,all
+blend_grid,mixed,Original hybrid,0.877054,33,all
+blend_grid,mixed,Original hybrid,0.872937,44,all
+blend_grid,mixed,Original hybrid,0.877277,55,all
+blend_grid,mixed,Arithmetic 75/25,0.881294,11,all
+blend_grid,mixed,Arithmetic 75/25,0.882732,22,all
+blend_grid,mixed,Arithmetic 75/25,0.879898,33,all
+blend_grid,mixed,Arithmetic 75/25,0.876557,44,all
+blend_grid,mixed,Arithmetic 75/25,0.879819,55,all
+blend_grid,mixed,Arithmetic 50/50,0.878519,11,all
+blend_grid,mixed,Arithmetic 50/50,0.880453,22,all
+blend_grid,mixed,Arithmetic 50/50,0.879173,33,all
+blend_grid,mixed,Arithmetic 50/50,0.875525,44,all
+blend_grid,mixed,Arithmetic 50/50,0.877357,55,all
+blend_grid,mixed,Geometric 75/25,0.881,11,all
+blend_grid,mixed,Geometric 75/25,0.88202,22,all
+blend_grid,mixed,Geometric 75/25,0.880643,33,all
+blend_grid,mixed,Geometric 75/25,0.876433,44,all
+blend_grid,mixed,Geometric 75/25,0.878813,55,all
+blend_grid,mixed,IMU25 / Full50,0.879775,11,all
+blend_grid,mixed,IMU25 / Full50,0.881836,22,all
+blend_grid,mixed,IMU25 / Full50,0.879492,33,all
+blend_grid,mixed,IMU25 / Full50,0.876471,44,all
+blend_grid,mixed,IMU25 / Full50,0.878112,55,all
+blend_grid,mixed,IMU50 / Full25,0.879768,11,all
+blend_grid,mixed,IMU50 / Full25,0.881816,22,all
+blend_grid,mixed,IMU50 / Full25,0.879983,33,all
+blend_grid,mixed,IMU50 / Full25,0.876452,44,all
+blend_grid,mixed,IMU50 / Full25,0.87831,55,all
+leaderboard,public,V2,0.883769,not_applicable,all
+leaderboard,public,V3,0.881144,not_applicable,all
+leaderboard,private,V2,0.862221,not_applicable,all
+leaderboard,private,V3,0.864288,not_applicable,all
+bigru_pilots,imu,3-CNN reference,0.8252022099,reported_validation,1
+bigru_pilots,imu,BiGRU mean,0.75283,reported_validation,1
+bigru_pilots,imu,BiGRU attention,0.76272,reported_validation,1
+tof_contrast,full,Original,0.87402,reported_validation,2
+tof_contrast,full,Contrast x1.25,0.87352,reported_validation,2
+tof_contrast,full,Contrast x0.8,0.87112,reported_validation,2
+family_weights,mixed,Equal weights,0.878998,five_order_mean,all
+family_weights,mixed,Heading 50%,0.878298,five_order_mean,all
+family_weights,mixed,Spatial 50%,0.877345,five_order_mean,all
+family_weights,mixed,Phases 50%,0.876086,five_order_mean,all
