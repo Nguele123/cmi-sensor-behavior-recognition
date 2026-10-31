@@ -42,7 +42,7 @@ Our evaluation takes the predicted 18-class gesture first, then collapses non-ta
 
 ### 1. Sensor preprocessing and CNN representations
 
-Three original model variants — **spatial**, **phases** and **heading** — form an equal-weight ensemble.
+Three adapted model variants — **spatial**, **phases** and **heading** — form an equal-weight ensemble. Their starting CNN code comes from **MYSO (myso1987)**; see [code sources and adapted training scripts](#acknowledgements-and-code-sources).
 
 The pipeline includes IMU feature construction, fold-specific preprocessing, handedness handling, modality availability masks and temporal sequence preparation. The CNN systems use temporal convolutions; ToF grids are processed with spatial encoders.
 
@@ -158,15 +158,40 @@ This initial repository documents the final method and verified results.
 
 Competition data and trained weights are not included in this initial commit.
 
-## Acknowledgements
+## Acknowledgements and code sources
 
-This study benefited from the competition's public discussions and solution write-ups.
+### CNN foundation: MYSO (myso1987)
 
-In particular, the **second-place solution write-up** supplied the idea of composite 102-situation targets and no-repeat assignment. This project verifies the collection structure, adapts that idea to its CNN pipeline and evaluates hybrid probability construction and sequential blending.
+**The initial CNN code was taken from MYSO and adapted for this project.** MYSO is the code source, not merely a general inspiration.
 
-The **first-place solution write-up** also informed investigations of sensor preprocessing and geometry.
+- Author: [MYSO / myso1987](https://www.kaggle.com/myso1987)
+- Public CNN baseline: [CMI3 Pyroch Baseline+model_add, Aug, folds](https://www.kaggle.com/code/myso1987/cmi3-pyroch-baseline-model-add-aug-folds)
 
-Exact source links and code-origin details will be recorded alongside the imported source files.
+The adapted spatial, phases, heading and composite102 training scripts are saved with the evaluated model artifacts. Their exact source version and code notices will be checked when importing the files; this repository does not yet contain those scripts.
+
+### Second-place write-up: participant collection structure
+
+The **second-place solution write-up was the solution write-up that helped this project**. It highlighted a missing aspect of our analysis: the structured set of exercises per participant and the absence of repeated composite situations.
+
+That observation guided our participant/repetition analysis, composite-target experiments and final blending variants. We implemented and evaluated these components in our adapted CNN pipeline. We did not import the author's full architecture, phase-aware attention, phase-aligned mixup or online pseudo-labeling pipeline.
+
+Our 102-situation no-repeat assignment is conceptually connected to the observation described in that write-up; the implementation and hybrid probability construction are documented here separately.
+
+### Accessing our adapted CNN and composite102 code
+
+Run [the source-export script](scripts/export_training_sources.py) in the Kaggle notebook with the saved artifact dataset mounted. It packages the existing files without retraining:
+
+| Code | Saved file in the artifact dataset |
+|---|---|
+| Spatial CNN | `initial_ensemble/spatial/train_cmi.py` |
+| Phases CNN | `initial_ensemble/phases/train_cmi.py` |
+| Heading CNN | `initial_ensemble/heading/train_cmi.py` |
+| CNN with 102 composite targets | `composite102/train_cmi.py` |
+
+The base artifact directory is `/kaggle/input/datasets/angelisnguele/azfgrvv/cmi_hybrid102_complete_folds1_to5`.
+
+The export includes SHA-256 hashes to preserve file identity. The saved scripts must be imported before this repository can provide direct links to our actual adapted training code.
+
 
 ## Author
 
